@@ -16,13 +16,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -32,31 +32,49 @@ public class SecurityConfig {
 
     private RSAKey rsaKey;
 
+//    private final JpaUserDetailsService myUserDetailsService;
+//
+//    public SecurityConfig(JpaUserDetailsService myUserDetailsService) {
+//        this.myUserDetailsService = myUserDetailsService;
+//    }
+
     @Bean
-    public AuthenticationManager authManager(UserDetailsService userDetailsService) {
-        var authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        return new ProviderManager(authProvider);
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("dvega")
-                        .password("{noop}password")
-                        .authorities("read")
-                        .build()
-        );
+    public AuthenticationManager authManager(UserDetailsService userDetailsService,PasswordEncoder passwordEncoder) {
+        var authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return new ProviderManager(authProvider);
     }
+
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return new InMemoryUserDetailsManager(
+//                User.withUsername("dvega")
+//                        .password("{noop}password")
+//                        .authorities("read")
+//                        .build()
+//        );
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth -> auth
-                        .mvcMatchers("/token").permitAll()
-                        .anyRequest().authenticated()
+                                .mvcMatchers("/token","/register").permitAll()
+//                        .antMatchers("/h2-console/**").permitAll()
+                                .mvcMatchers("/api/role/**").hasRole("ADMIN")
+                                .mvcMatchers("/api/any/**").hasAnyRole("CUSTOMER","ADMIN","USER")
+                                .anyRequest().authenticated()
                 )
+//                .userDetailsService(myUserDetailsService)
+//                .headers(headers -> headers.frameOptions().sameOrigin())
+//                .httpBasic(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .build();
@@ -76,7 +94,7 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder() throws JOSEException {
-         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
+        return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
     }
 
 }
