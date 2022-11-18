@@ -12,12 +12,11 @@ import java.sql.Timestamp;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "users")
+@Table(name = "user")
 public class UserEntity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @NonNull
     @Column(name = "username")

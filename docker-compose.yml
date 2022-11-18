@@ -10,7 +10,7 @@ services:
       MYSQL_USER: 'dev'
       MYSQL_PASSWORD: 'abcd1234'
     ports: # <Port exposed> : < MySQL Port running inside container>
-      - '3346:3306'
+      - '3356:3306'
     expose: # Opens port 3326 on the container
-      - '3346' # Where our data will be persisted
+      - '3356' # Where our data will be persisted
     #TODO: make it so it creates both mysql and java app from
