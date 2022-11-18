@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +25,12 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -31,13 +38,6 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private RSAKey rsaKey;
-
-//    private final JpaUserDetailsService myUserDetailsService;
-//
-//    public SecurityConfig(JpaUserDetailsService myUserDetailsService) {
-//        this.myUserDetailsService = myUserDetailsService;
-//    }
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -51,25 +51,16 @@ public class SecurityConfig {
         return new ProviderManager(authProvider);
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return new InMemoryUserDetailsManager(
-//                User.withUsername("dvega")
-//                        .password("{noop}password")
-//                        .authorities("read")
-//                        .build()
-//        );
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth -> auth
                                 .mvcMatchers("/token","/register").permitAll()
 //                        .antMatchers("/h2-console/**").permitAll()
-                                .mvcMatchers("/api/role/**").hasRole("ADMIN")
-                                .mvcMatchers("/api/any/**").hasAnyRole("CUSTOMER","ADMIN","USER")
+//                                .mvcMatchers("/api/role/**").hasRole("ADMIN")
+//                                .mvcMatchers("/api/any/**").hasAnyRole("CUSTOMER","ADMIN","USER")
                                 .anyRequest().authenticated()
                 )
 //                .userDetailsService(myUserDetailsService)
@@ -95,6 +86,17 @@ public class SecurityConfig {
     @Bean
     JwtDecoder jwtDecoder() throws JOSEException {
         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
+    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }
