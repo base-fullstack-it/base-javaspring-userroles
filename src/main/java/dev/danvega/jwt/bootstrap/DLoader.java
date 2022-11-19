@@ -1,11 +1,15 @@
 package dev.danvega.jwt.bootstrap;
 
+import dev.danvega.jwt.domain.Customer;
 import dev.danvega.jwt.domain.security.Authority;
 import dev.danvega.jwt.domain.security.Role;
+import dev.danvega.jwt.domain.security.User;
+import dev.danvega.jwt.repository.CustomerRepository;
 import dev.danvega.jwt.repository.security.AuthorityRepository;
 import dev.danvega.jwt.repository.security.RoleRepository;
 import dev.danvega.jwt.repository.security.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -13,22 +17,37 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class DLoader implements CommandLineRunner {
 //    private final BreweryRepository breweryRepository;
 //    private final BeerRepository beerRepository;
 //    private final BeerInventoryRepository beerInventoryRepository;
 //    private final BeerOrderRepository beerOrderRepository;
-//    private final CustomerRepository customerRepository;
+    public static final String TASTING_ROOM = "Tasting Room";
+    public static final String ST_PETE_DISTRIBUTING = "St Pete Distributing";
+    public static final String DUNEDIN_DISTRIBUTING = "Dunedin Distributing";
+    public static final String KEY_WEST_DISTRIBUTORS = "Key West Distributors";
+    public static final String STPETE_USER = "stpete";
+    public static final String DUNEDIN_USER = "dunedin";
+    public static final String KEYWEST_USER = "keywest";
+
+    public static final String BEER_1_UPC = "0631234200036";
+    public static final String BEER_2_UPC = "0631234300019";
+    public static final String BEER_3_UPC = "0083783375213";
+
     private final AuthorityRepository authorityRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     @Override
     public void run(String... args) throws Exception {
 //        loadSecurityData();
+        loadCustomerData();
     }
 
     private void loadSecurityData() {
@@ -77,4 +96,47 @@ public class DLoader implements CommandLineRunner {
 
         roleRepository.saveAll(Arrays.asList(adminRole, customerRole, userRole));
     }
+    private void loadCustomerData() {
+        Role customerRole = roleRepository.findByName("CUSTOMER").orElseThrow();
+
+        //create customers
+        Customer stPeteCustomer = customerRepository.save(Customer.builder()
+                .customerName(ST_PETE_DISTRIBUTING)
+//                .apiKey(UUID.randomUUID())
+                .build());
+
+        Customer dunedinCustomer = customerRepository.save(Customer.builder()
+                .customerName(DUNEDIN_DISTRIBUTING)
+//                .apiKey(UUID.randomUUID())
+                .build());
+
+        Customer keyWestCustomer = customerRepository.save(Customer.builder()
+                .customerName(KEY_WEST_DISTRIBUTORS)
+//                .apiKey(UUID.randomUUID())
+                .build());
+
+        //create users
+        User stPeteUser = userRepository.save(User.builder().username(STPETE_USER)
+                .password(passwordEncoder.encode("password"))
+                .customer(stPeteCustomer)
+                .role(customerRole).build());
+
+        User dunedinUser = userRepository.save(User.builder().username(DUNEDIN_USER)
+                .password(passwordEncoder.encode("password"))
+                .customer(dunedinCustomer)
+                .role(customerRole).build());
+
+        User keywest = userRepository.save(User.builder().username(KEYWEST_USER)
+                .password(passwordEncoder.encode("password"))
+                .customer(keyWestCustomer)
+                .role(customerRole).build());
+
+        //create orders
+//        createOrder(stPeteCustomer);
+//        createOrder(dunedinCustomer);
+//        createOrder(keyWestCustomer);
+
+//        log.debug("Orders Loaded: " + beerOrderRepository.count());
+    }
+
 }

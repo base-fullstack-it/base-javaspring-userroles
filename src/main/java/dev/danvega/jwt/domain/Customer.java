@@ -17,10 +17,9 @@
 package dev.danvega.jwt.domain;
 
 import dev.danvega.jwt.domain.security.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -30,32 +29,32 @@ import java.util.UUID;
 /**
  * Created by jt on 2019-01-26.
  */
-@Getter
 @Setter
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-public class Customer extends BaseEntity {
+public class Customer {
 
-    @Builder
-    public Customer(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerName,
-                    UUID apiKey
-//                    ,Set<BeerOrder> beerOrders
-    ) {
-        super(id, version, createdDate, lastModifiedDate);
-        this.customerName = customerName;
-        this.apiKey = apiKey;
-//        this.beerOrders = beerOrders;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
 
     private String customerName;
-
-    @Column(length = 36, columnDefinition = "varchar")
-    private UUID apiKey;
 
 //    @OneToMany(mappedBy = "customer")
 //    private Set<BeerOrder> beerOrders;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<User> users;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp createdDate;
+
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
 
 }
