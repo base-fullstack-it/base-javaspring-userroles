@@ -54,7 +54,7 @@ public class DLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        loadSecurityData();
         loadBreweryData();
-        loadCustomerData();
+//        loadCustomerData();
     }
 
     private void loadSecurityData() {
