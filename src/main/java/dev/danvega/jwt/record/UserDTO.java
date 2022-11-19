@@ -1,6 +1,5 @@
 package dev.danvega.jwt.record;
 
-import dev.danvega.jwt.entity.UserEntity;
 import dev.danvega.jwt.entity.security.User;
 import lombok.Builder;
 
