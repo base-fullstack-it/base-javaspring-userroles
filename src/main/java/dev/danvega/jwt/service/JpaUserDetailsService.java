@@ -1,6 +1,6 @@
 package dev.danvega.jwt.service;
 
-import dev.danvega.jwt.repository.UserRepository;
+import dev.danvega.jwt.repository.security.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

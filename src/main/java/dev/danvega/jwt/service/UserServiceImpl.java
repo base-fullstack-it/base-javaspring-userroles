@@ -1,11 +1,10 @@
 package dev.danvega.jwt.service;
 
 
-import dev.danvega.jwt.entity.UserEntity;
 import dev.danvega.jwt.entity.security.User;
 import dev.danvega.jwt.exception.GeneralMessageException;
 import dev.danvega.jwt.record.UserDTO;
-import dev.danvega.jwt.repository.UserRepository;
+import dev.danvega.jwt.repository.security.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
