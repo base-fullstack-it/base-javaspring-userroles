@@ -7,7 +7,6 @@ import dev.danvega.jwt.domain.Customer;
 import dev.danvega.jwt.domain.security.Authority;
 import dev.danvega.jwt.domain.security.Role;
 import dev.danvega.jwt.domain.security.User;
-import dev.danvega.jwt.enums.BeerStyleEnum;
 import dev.danvega.jwt.repository.BeerInventoryRepository;
 import dev.danvega.jwt.repository.BeerRepository;
 import dev.danvega.jwt.repository.BreweryRepository;
@@ -58,6 +57,7 @@ public class DLoader implements CommandLineRunner {
     }
 
     private void loadSecurityData() {
+        if(roleRepository.count() != 0) return;
         //beer auths
         Authority createBeer = authorityRepository.save(Authority.builder().permission("beer.create").build());
         Authority readBeer = authorityRepository.save(Authority.builder().permission("beer.read").build());
@@ -112,10 +112,8 @@ public class DLoader implements CommandLineRunner {
 
             Beer mangoBobs = Beer.builder()
                     .beerName("Mango Bobs")
-                    .beerStyle(BeerStyleEnum.IPA)
                     .minOnHand(12)
                     .quantityToBrew(200)
-                    .upc(BEER_1_UPC)
                     .build();
 
             beerRepository.save(mangoBobs);
@@ -126,10 +124,8 @@ public class DLoader implements CommandLineRunner {
 
             Beer galaxyCat = Beer.builder()
                     .beerName("Galaxy Cat")
-                    .beerStyle(BeerStyleEnum.PALE_ALE)
                     .minOnHand(12)
                     .quantityToBrew(200)
-                    .upc(BEER_2_UPC)
                     .build();
 
             beerRepository.save(galaxyCat);
@@ -140,10 +136,8 @@ public class DLoader implements CommandLineRunner {
 
             Beer pinball = Beer.builder()
                     .beerName("Pinball Porter")
-                    .beerStyle(BeerStyleEnum.PORTER)
                     .minOnHand(12)
                     .quantityToBrew(200)
-                    .upc(BEER_3_UPC)
                     .build();
 
             beerRepository.save(pinball);

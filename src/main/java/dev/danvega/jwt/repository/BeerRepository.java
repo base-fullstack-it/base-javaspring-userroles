@@ -33,9 +33,9 @@ public interface BeerRepository extends JpaRepository<Beer, Integer> {
 
     Page<Beer> findAllByBeerNameIsLike(String beerName, Pageable pageable);
 
-    Page<Beer> findAllByBeerStyle(BeerStyleEnum beerStyle, Pageable pageable);
+//    Page<Beer> findAllByBeerStyle(BeerStyleEnum beerStyle, Pageable pageable);
 
-    Page<Beer> findAllByBeerNameAndBeerStyle(String beerName, BeerStyleEnum beerStyle, Pageable pageable);
+//    Page<Beer> findAllByBeerNameAndBeerStyle(String beerName, BeerStyleEnum beerStyle, Pageable pageable);
 
-    Beer findByUpc(String upc);
+//    Beer findByUpc(String upc);
 }
