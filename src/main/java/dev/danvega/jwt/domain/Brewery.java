@@ -16,14 +16,13 @@
  */
 package dev.danvega.jwt.domain;
 
-import dev.danvega.jwt.domain.security.User;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import java.sql.Timestamp;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -33,28 +32,14 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Customer extends BaseEntity{
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Integer id;
+public class Brewery extends BaseEntity {
 
     @Builder
-    public Customer(
-            Integer id,
-            Timestamp createdDate,
-            Timestamp lastModifiedDate,
-            String customerName,
-            Set<BeerOrder> beerOrders
-            ) {
+    public Brewery(Integer id, Timestamp createdDate, Timestamp lastModifiedDate, String breweryName) {
         super(id, createdDate, lastModifiedDate);
-        this.customerName = customerName;
+        this.breweryName = breweryName;
     }
-    //    @OneToMany(mappedBy = "customer")
-//    private Set<BeerOrder> beerOrders;
-    private String customerName;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<User> users;
+    private String breweryName;
 
 }

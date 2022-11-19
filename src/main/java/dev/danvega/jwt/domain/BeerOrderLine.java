@@ -16,14 +16,14 @@
  */
 package dev.danvega.jwt.domain;
 
-import dev.danvega.jwt.domain.security.User;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -33,28 +33,25 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Customer extends BaseEntity{
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Integer id;
+public class BeerOrderLine extends BaseEntity {
 
     @Builder
-    public Customer(
-            Integer id,
-            Timestamp createdDate,
-            Timestamp lastModifiedDate,
-            String customerName,
-            Set<BeerOrder> beerOrders
-            ) {
+    public BeerOrderLine(Integer id, Timestamp createdDate, Timestamp lastModifiedDate,
+                         BeerOrder beerOrder, Beer beer, Integer orderQuantity,
+                         Integer quantityAllocated) {
         super(id, createdDate, lastModifiedDate);
-        this.customerName = customerName;
+        this.beerOrder = beerOrder;
+        this.beer = beer;
+        this.orderQuantity = orderQuantity;
+        this.quantityAllocated = quantityAllocated;
     }
-    //    @OneToMany(mappedBy = "customer")
-//    private Set<BeerOrder> beerOrders;
-    private String customerName;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<User> users;
+    @ManyToOne
+    private BeerOrder beerOrder;
 
+    @ManyToOne
+    private Beer beer;
+
+    private Integer orderQuantity = 0;
+    private Integer quantityAllocated = 0;
 }
