@@ -1,6 +1,6 @@
 package dev.danvega.jwt.repository.security;
 
-import dev.danvega.jwt.entity.security.Role;
+import dev.danvega.jwt.domain.security.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

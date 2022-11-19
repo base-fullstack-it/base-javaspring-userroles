@@ -1,7 +1,7 @@
 package dev.danvega.jwt.service;
 
 
-import dev.danvega.jwt.entity.security.User;
+import dev.danvega.jwt.domain.security.User;
 import dev.danvega.jwt.exception.GeneralMessageException;
 import dev.danvega.jwt.record.UserDTO;
 import dev.danvega.jwt.repository.security.UserRepository;

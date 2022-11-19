@@ -1,5 +1,6 @@
-package dev.danvega.jwt.entity.security;
+package dev.danvega.jwt.domain.security;
 
+import dev.danvega.jwt.domain.Customer;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,8 +39,8 @@ public class User implements UserDetails, CredentialsContainer {
         inverseJoinColumns = {@JoinColumn(name = "user_role_role_id", referencedColumnName = "ID")})
     private Set<Role> roles;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    private Customer customer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Customer customer;
 
     @Transient
     public Set<GrantedAuthority> getAuthorities() {

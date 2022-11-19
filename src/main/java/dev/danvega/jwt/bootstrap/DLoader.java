@@ -1,7 +1,7 @@
 package dev.danvega.jwt.bootstrap;
 
-import dev.danvega.jwt.entity.security.Authority;
-import dev.danvega.jwt.entity.security.Role;
+import dev.danvega.jwt.domain.security.Authority;
+import dev.danvega.jwt.domain.security.Role;
 import dev.danvega.jwt.repository.security.AuthorityRepository;
 import dev.danvega.jwt.repository.security.RoleRepository;
 import dev.danvega.jwt.repository.security.UserRepository;

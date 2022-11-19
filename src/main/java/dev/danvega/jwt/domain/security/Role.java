@@ -1,4 +1,4 @@
-package dev.danvega.jwt.entity.security;
+package dev.danvega.jwt.domain.security;
 
 import lombok.*;
 
