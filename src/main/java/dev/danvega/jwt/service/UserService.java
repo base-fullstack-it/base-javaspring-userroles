@@ -1,8 +1,8 @@
 package dev.danvega.jwt.service;
 
-import dev.danvega.jwt.record.User;
+import dev.danvega.jwt.record.UserDTO;
 
 public interface UserService {
 
-    User createUser(User user);
+    UserDTO createUser(UserDTO user);
 }

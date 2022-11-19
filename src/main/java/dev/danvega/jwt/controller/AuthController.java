@@ -1,7 +1,7 @@
 package dev.danvega.jwt.controller;
 
 import dev.danvega.jwt.model.LoginRequest;
-import dev.danvega.jwt.record.User;
+import dev.danvega.jwt.record.UserDTO;
 import dev.danvega.jwt.service.TokenService;
 import dev.danvega.jwt.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) throws AuthenticationException {
+    public ResponseEntity<UserDTO> register(@RequestBody UserDTO user) throws AuthenticationException {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 

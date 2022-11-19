@@ -4,10 +4,10 @@ import dev.danvega.jwt.entity.UserEntity;
 import lombok.Builder;
 
 @Builder
-public record User(Integer id, String username, String password) {
+public record UserDTO(Integer id, String username, String password) {
 
-    public static User from(UserEntity userEntity){
-        return User.builder()
+    public static UserDTO from(UserEntity userEntity){
+        return UserDTO.builder()
                 .id(userEntity.getId())
                 .build();
     }
