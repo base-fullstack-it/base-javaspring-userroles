@@ -1,26 +1,29 @@
 package dev.danvega.jwt.service;
 
-import dev.danvega.jwt.model.SecurityUser;
 import dev.danvega.jwt.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public JpaUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository
-                .findByUsername(username)
-                .map(SecurityUser::new)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
+
+        log.debug("Getting User info via JPA");
+
+        return userRepository.findByUsername(username).orElseThrow(() -> {
+            return new UsernameNotFoundException("User name: " + username + " not found");
+        });
     }
 }
