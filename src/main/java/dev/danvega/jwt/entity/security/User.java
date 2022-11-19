@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class User implements UserDetails, CredentialsContainer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String username;
