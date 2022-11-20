@@ -1,16 +1,11 @@
 package dev.danvega.jwt.bootstrap;
 
-import dev.danvega.jwt.domain.Beer;
-import dev.danvega.jwt.domain.BeerInventory;
-import dev.danvega.jwt.domain.Brewery;
-import dev.danvega.jwt.domain.Customer;
+import dev.danvega.jwt.domain.*;
 import dev.danvega.jwt.domain.security.Authority;
 import dev.danvega.jwt.domain.security.Role;
 import dev.danvega.jwt.domain.security.User;
-import dev.danvega.jwt.repository.BeerInventoryRepository;
-import dev.danvega.jwt.repository.BeerRepository;
-import dev.danvega.jwt.repository.BreweryRepository;
-import dev.danvega.jwt.repository.CustomerRepository;
+import dev.danvega.jwt.enums.OrderStatusEnum;
+import dev.danvega.jwt.repository.*;
 import dev.danvega.jwt.repository.security.AuthorityRepository;
 import dev.danvega.jwt.repository.security.RoleRepository;
 import dev.danvega.jwt.repository.security.UserRepository;
@@ -23,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -31,7 +27,7 @@ public class DLoader implements CommandLineRunner {
     private final BreweryRepository breweryRepository;
     private final BeerRepository beerRepository;
     private final BeerInventoryRepository beerInventoryRepository;
-//    private final BeerOrderRepository beerOrderRepository;
+    private final BeerOrderRepository beerOrderRepository;
     public static final String TASTING_ROOM = "Tasting Room";
     public static final String ST_PETE_DISTRIBUTING = "St Pete Distributing";
     public static final String DUNEDIN_DISTRIBUTING = "Dunedin Distributing";
@@ -52,7 +48,8 @@ public class DLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 //        loadSecurityData();
-        loadBreweryData();
+//        loadBreweryData();
+        loadTastingRoomData();
 //        loadCustomerData();
     }
 
@@ -104,10 +101,10 @@ public class DLoader implements CommandLineRunner {
         roleRepository.saveAll(Arrays.asList(adminRole, customerRole, userRole));
     }
     private void loadBreweryData() {
-        if (breweryRepository.count() == 0) {
+        if (breweryRepository.count() != 0) return;
             breweryRepository.save(Brewery
                     .builder()
-                    .breweryName("Cage Brewing")
+                    .breweryName("Cage Brewings")
                     .build());
 
             Beer mangoBobs = Beer.builder()
@@ -146,7 +143,26 @@ public class DLoader implements CommandLineRunner {
                     .quantityOnHand(500)
                     .build());
 
-        }
+//        }
+    }
+    private void loadTastingRoomData() {
+        if(beerOrderRepository.count() != 0) return;
+        Customer tastingRoom = Customer.builder()
+                .customerName(TASTING_ROOM)
+                .build();
+
+        customerRepository.save(tastingRoom);
+
+        beerRepository.findAll().forEach(beer -> {
+            beerOrderRepository.save(BeerOrder.builder()
+                    .customer(tastingRoom)
+                    .orderStatus(OrderStatusEnum.placed)
+                    .beerOrderLines(Set.of(BeerOrderLine.builder()
+                            .beer(beer)
+                            .orderQuantity(2)
+                            .build()))
+                    .build());
+        });
     }
     private void loadCustomerData() {
         Role customerRole = roleRepository.findByName("CUSTOMER").orElseThrow();

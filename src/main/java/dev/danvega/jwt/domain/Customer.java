@@ -44,15 +44,16 @@ public class Customer extends BaseEntity{
             Integer id,
             Timestamp createdDate,
             Timestamp lastModifiedDate,
-            String customerName,
+            String name,
             Set<BeerOrder> beerOrders
             ) {
         super(id, createdDate, lastModifiedDate);
-        this.customerName = customerName;
+        this.name = name;
     }
-    //    @OneToMany(mappedBy = "customer")
-//    private Set<BeerOrder> beerOrders;
-    private String customerName;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<BeerOrder> beerOrders;
+    private String name;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<User> users;

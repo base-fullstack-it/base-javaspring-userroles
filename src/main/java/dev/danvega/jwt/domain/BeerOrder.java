@@ -17,17 +17,11 @@
 package dev.danvega.jwt.domain;
 
 import dev.danvega.jwt.enums.OrderStatusEnum;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
@@ -46,21 +40,20 @@ public class BeerOrder extends BaseEntity {
             Integer id,
             Timestamp createdDate,
             Timestamp lastModifiedDate,
-            String customerRef,
+//            String customerRef,
             Customer customer,
             Set<BeerOrderLine> beerOrderLines,
-            OrderStatusEnum orderStatus,
-            String orderStatusCallbackUrl
+            OrderStatusEnum orderStatus
+//            ,String orderStatusCallbackUrl
     ) {
         super(id, createdDate, lastModifiedDate);
-        this.customerRef = customerRef;
+//        this.customerRef = customerRef;
         this.customer = customer;
         this.beerOrderLines = beerOrderLines;
         this.orderStatus = orderStatus;
-        this.orderStatusCallbackUrl = orderStatusCallbackUrl;
+//        this.orderStatusCallbackUrl = orderStatusCallbackUrl;
     }
-
-    private String customerRef;
+//    private String customerRef;
 
     @ManyToOne
     private Customer customer;
@@ -68,7 +61,9 @@ public class BeerOrder extends BaseEntity {
     @OneToMany(mappedBy = "beerOrder", cascade = CascadeType.ALL)
     @Fetch(FetchMode.JOIN)
     private Set<BeerOrderLine> beerOrderLines;
-
-    private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
-    private String orderStatusCallbackUrl;
+    @NonNull
+    @Column(columnDefinition = "ENUM('placed', 'in_process','completed')")
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEnum orderStatus = OrderStatusEnum.placed;
+//    private String orderStatusCallbackUrl;
 }
