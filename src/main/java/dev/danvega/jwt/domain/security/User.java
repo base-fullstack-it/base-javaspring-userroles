@@ -40,6 +40,7 @@ public class User implements UserDetails, CredentialsContainer {
     private Set<Role> roles;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_customer_id")
     private Customer customer;
 
     @Transient

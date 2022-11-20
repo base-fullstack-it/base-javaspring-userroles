@@ -49,7 +49,7 @@ public class BeerInventory extends BaseEntity{
         this.quantityOnHand = quantityOnHand;
     }
 
-//    @JoinColumn(name = "beer_id")
+    @JoinColumn(name = "beer_inventory_beer_id")
     @ManyToOne
     private Beer beer;
 

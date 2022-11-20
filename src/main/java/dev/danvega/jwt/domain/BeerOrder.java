@@ -56,6 +56,7 @@ public class BeerOrder extends BaseEntity {
 //    private String customerRef;
 
     @ManyToOne
+    @JoinColumn(name = "beer_order_customer_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "beerOrder", cascade = CascadeType.ALL)
