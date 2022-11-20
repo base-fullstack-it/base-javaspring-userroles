@@ -49,7 +49,7 @@ public class DLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        loadSecurityData();
 //        loadBreweryData();
-        loadTastingRoomData();
+//        loadTastingRoomData();
 //        loadCustomerData();
     }
 
@@ -200,11 +200,23 @@ public class DLoader implements CommandLineRunner {
                 .role(customerRole).build());
 
         //create orders
-//        createOrder(stPeteCustomer);
-//        createOrder(dunedinCustomer);
-//        createOrder(keyWestCustomer);
+        createOrder(stPeteCustomer);
+        createOrder(dunedinCustomer);
+        createOrder(keyWestCustomer);
 
 //        log.debug("Orders Loaded: " + beerOrderRepository.count());
     }
+
+    private BeerOrder createOrder(Customer customer) {
+        return  beerOrderRepository.save(BeerOrder.builder()
+                .customer(customer)
+                .orderStatus(OrderStatusEnum.placed)
+                .beerOrderLines(Set.of(BeerOrderLine.builder()
+                        .beer(beerRepository.findById(1).orElseThrow())
+                        .orderQuantity(2)
+                        .build()))
+                .build());
+    }
+
 
 }
