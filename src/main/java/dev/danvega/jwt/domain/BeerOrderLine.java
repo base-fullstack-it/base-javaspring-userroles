@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -47,9 +48,12 @@ public class BeerOrderLine extends BaseEntity {
     }
 
     @ManyToOne
+    @JoinColumn(name = "beer_order_line_beer_order_id")
     private BeerOrder beerOrder;
 
+    //TODO:FINDME beer_order_line_beer_id
     @ManyToOne
+    @JoinColumn(name = "beer_order_line_beer_id")
     private Beer beer;
 
     private Integer orderQuantity = 0;

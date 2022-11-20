@@ -148,7 +148,7 @@ public class DLoader implements CommandLineRunner {
     private void loadTastingRoomData() {
         if(beerOrderRepository.count() != 0) return;
         Customer tastingRoom = Customer.builder()
-                .customerName(TASTING_ROOM)
+                .name(TASTING_ROOM)
                 .build();
 
         customerRepository.save(tastingRoom);
@@ -169,17 +169,17 @@ public class DLoader implements CommandLineRunner {
 
         //create customers
         Customer stPeteCustomer = customerRepository.save(Customer.builder()
-                .customerName(ST_PETE_DISTRIBUTING)
+                .name(ST_PETE_DISTRIBUTING)
 //                .apiKey(UUID.randomUUID())
                 .build());
 
         Customer dunedinCustomer = customerRepository.save(Customer.builder()
-                .customerName(DUNEDIN_DISTRIBUTING)
+                .name(DUNEDIN_DISTRIBUTING)
 //                .apiKey(UUID.randomUUID())
                 .build());
 
         Customer keyWestCustomer = customerRepository.save(Customer.builder()
-                .customerName(KEY_WEST_DISTRIBUTORS)
+                .name(KEY_WEST_DISTRIBUTORS)
 //                .apiKey(UUID.randomUUID())
                 .build());
 

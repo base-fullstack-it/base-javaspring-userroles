@@ -34,11 +34,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 public class Customer extends BaseEntity{
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Integer id;
-
+    
     @Builder
     public Customer(
             Integer id,
