@@ -2,12 +2,12 @@ package dev.danvega.jwt.controller;
 import dev.danvega.jwt.repository.CustomerRepository;
 import dev.danvega.jwt.security.perms.CustomerReadPermission;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RequestMapping("/customers")
-@Controller
+@RestController
 public class CustomerController {
 
     //ToDO: Add service
